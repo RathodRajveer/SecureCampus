@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Governance | SecureCampus</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #172033;
+        }
+        header {
+            background: #14213d;
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header a { color: white; text-decoration: none; margin-left: 16px; }
+        main { max-width: 1150px; margin: 32px auto; padding: 0 20px; }
+        .panel {
+            background: white;
+            padding: 24px;
+            margin-bottom: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px #1720330d;
+        }
+        .muted { color: #667085; line-height: 1.7; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 650px; }
+        th, td {
+            text-align: left;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e7ebf2;
+            font-size: 14px;
+        }
+        th { background: #f7f9fc; color: #475467; }
+        .role {
+            display: inline-block;
+            background: #e0eaff;
+            color: #2448a5;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .count {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        footer { text-align: center; padding: 24px; color: #667085; font-size: 13px; }
+    </style>
+</head>
+<body>
+<header>
+    <div><strong>SecureCampus</strong> · Access Governance</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/admin-dashboard">Dashboard</a>
+        <a href="/admin/students">Students</a>
+        <a href="/admin/audit">Audit Reports</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main>
+    <section class="panel">
+        <h1>Access Governance</h1>
+        <p class="muted">
+            Review the application's role-based access policy and student registry.
+            SecureCampus uses Keycloak realm roles for authorization, while Flask
+            protects individual application routes.
+        </p>
+    </section>
+
+    <section class="panel">
+        <h2>Registered Student Records</h2>
+        <p class="muted">
+            These are student records stored in the SecureCampus application database.
+            They are not a complete listing of Keycloak users.
+        </p>
+        <div class="count">{{ students|length }}</div>
+        <div class="muted">Student records in the local registry</div>
+
+        <div class="table-wrap" style="margin-top: 20px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student["keycloak_username"] }}</td>
+                        <td>{{ student["full_name"] }}</td>
+                        <td>{{ student["email"] }}</td>
+                        <td>{{ student["department"] }}</td>
+                        <td>{{ student["created_at"] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">No student records are registered yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Role-Based Access Policy</h2>
+        <p class="muted">
+            This matrix documents the intended application permissions.
+            Actual access is enforced by the application's role checks.
+        </p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>STUDENT</th>
+                        <th>FACULTY</th>
+                        <th>ADMIN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Student Portal</td>
+                        <td>Allowed</td>
+                        <td>Denied</td>
+                        <td>Denied</td>
+                    </tr>
+                    <tr>
+                        <td>Faculty Portal</td>
+                        <td>Denied</td>
+                        <td>Allowed</td>
+                        <td>Denied</td>
+                    </tr>
+                    <tr>
+                        <td>Admin Dashboard</td>
+                        <td>Denied</td>
+                        <td>Denied</td>
+                        <td>Allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Student Management</td>
+                        <td>Denied</td>
+                        <td>Denied</td>
+                        <td>Allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Audit & Reports</td>
+                        <td>Denied</td>
+                        <td>Denied</td>
+                        <td>Allowed</td>
+                    </tr>
+                    <tr>
+                        <td>Access Governance</td>
+                        <td>Denied</td>
+                        <td>Denied</td>
+                        <td>Allowed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>SecureCampus · Identity and Access Management Project</footer>
+</body>
+</html>

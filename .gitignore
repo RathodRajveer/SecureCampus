@@ -1,0 +1,33 @@
+
+# Python virtual environment
+venv/
+.venv/
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local databases and backups
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Credential files — keep private
+user Credentials
+user Credentials.*
+
+# Logs
+*.log
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+app_backup.py.py

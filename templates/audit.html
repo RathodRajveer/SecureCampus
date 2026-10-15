@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit & Reports | SecureCampus</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #172033;
+        }
+        header {
+            background: #14213d;
+            color: white;
+            padding: 22px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        header a { color: white; text-decoration: none; margin-left: 16px; }
+        main { max-width: 1200px; margin: 32px auto; padding: 0 20px; }
+        .intro, .table-wrap {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px #1720330d;
+            margin-bottom: 22px;
+        }
+        .intro p { color: #667085; line-height: 1.6; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 760px; }
+        th, td {
+            text-align: left;
+            padding: 13px 12px;
+            border-bottom: 1px solid #e7ebf2;
+            font-size: 14px;
+        }
+        th { background: #f7f9fc; color: #475467; }
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .success { background: #dcfae6; color: #067647; }
+        .failed { background: #fee4e2; color: #b42318; }
+        .empty { text-align: center; padding: 30px; color: #667085; }
+        footer { text-align: center; padding: 24px; color: #667085; font-size: 13px; }
+    </style>
+</head>
+<body>
+<header>
+    <div><strong>SecureCampus</strong> · Audit & Reports</div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/admin-dashboard">Admin Dashboard</a>
+        <a href="/admin/students">Students</a>
+        <a href="/logout">Logout</a>
+    </nav>
+</header>
+
+<main>
+    <section class="intro">
+        <h1>Audit & Reports</h1>
+        <p>
+            Review recent events recorded by the SecureCampus application.
+            The table displays up to 200 most recent recorded events.
+        </p>
+    </section>
+
+    <section class="table-wrap">
+        <h2>Recent Activity</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log["id"] }}</td>
+                    <td>{{ log["username"] }}</td>
+                    <td>{{ log["action"] }}</td>
+                    <td>{{ log["details"] or "-" }}</td>
+                    <td>
+                        <span class="status {{ 'success' if log['status'] == 'SUCCESS' else 'failed' }}">
+                            {{ log["status"] }}
+                        </span>
+                    </td>
+                    <td>{{ log["created_at"] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="empty">
+                        No audit events recorded yet. Events will appear here after logging is connected.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<footer>SecureCampus · Identity and Access Management Project</footer>
+</body>
+</html>

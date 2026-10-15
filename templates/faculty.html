@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Portal | SecureCampus</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        header {
+            background: #12305a;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px #00000012;
+            margin-bottom: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        a { color: white; }
+    </style>
+</head>
+<body>
+    <header>
+        <strong>SecureCampus | Faculty Portal</strong>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </header>
+
+    <main>
+        <div class="card">
+            <span class="badge">FACULTY ACCESS</span>
+            <h1>Welcome, {{ user.name or user.username }}!</h1>
+            <p>You have successfully accessed the faculty portal.</p>
+        </div>
+
+        <div class="card">
+            <h2>Faculty Dashboard</h2>
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Role:</strong> FACULTY</p>
+        </div>
+    </main>
+</body>
+</html>

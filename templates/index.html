@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureCampus | IAM Portal</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172554;
+        }
+
+        nav {
+            background: #142b4a;
+            color: white;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 { margin: 0; }
+
+        .hero {
+            text-align: center;
+            padding: 70px 20px;
+            background: linear-gradient(135deg, #142b4a, #2563eb);
+            color: white;
+        }
+
+        .hero h1 { font-size: 42px; margin-bottom: 15px; }
+        .hero p { font-size: 18px; line-height: 1.7; }
+
+        .modules {
+            max-width: 1050px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #0000000d;
+        }
+
+        .card h3 { color: #1d4ed8; }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 16px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2>SecureCampus</h2>
+
+<div>
+    {% if user %}
+        <span>Welcome, {{ user.username }}!</span>
+
+        <span style="margin-left: 10px; padding: 5px 10px; border-radius: 12px; background: #e0e7ff; color: #1e3a8a; font-size: 12px; font-weight: bold;">
+            {% if 'ADMIN' in user.roles %}
+                ADMIN
+            {% elif 'FACULTY' in user.roles %}
+                FACULTY
+            {% elif 'STUDENT' in user.roles %}
+                STUDENT
+            {% else %}
+                USER
+            {% endif %}
+        </span>
+
+        <a href="{{ url_for('logout') }}" style="color:white; margin-left:15px;">
+            Logout
+        </a>
+    {% else %}
+        <a href="{{ url_for('login') }}" style="color:white; font-weight:bold;">
+            Login with Keycloak
+        </a>
+    {% endif %}
+</div>
+
+</nav>
+
+<section class="hero">
+    <h1>Welcome to SecureCampus</h1>
+    <p>A secure college portal powered by Keycloak Identity and Access Management.</p>
+    <p>Single Sign-On | Multi-Factor Authentication | Role-Based Access</p>
+</section>
+
+
+<section class="modules">
+    <div class="card">
+        <h3>Authentication &amp; SSO</h3>
+        <p>Secure login through Keycloak.</p>
+    </div>
+
+    <div class="card">
+        <h3>User Management</h3>
+        <p>Manage college identities and account information.</p>
+    </div>
+
+    <div class="card">
+        <h3>Roles &amp; Permissions</h3>
+        <p>Control access for administrators, faculty and students.</p>
+    </div>
+
+    {% if user %}
+        {% if 'ADMIN' in user.roles %}
+            <div class="card">
+                <h3>Admin Dashboard</h3>
+                <p>Manage student records and oversee portal access.</p>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn">
+                    Open Admin Dashboard
+                </a>
+            </div>
+
+            <div class="card">
+                <h3>Student Management</h3>
+                <p>View and add student records.</p>
+                <a href="{{ url_for('admin_students') }}" class="btn">
+                    Manage Students
+                </a>
+            </div>
+
+        {% elif 'FACULTY' in user.roles %}
+            <div class="card">
+                <h3>Faculty Portal</h3>
+                <p>Access the faculty portal and faculty-specific information.</p>
+                <a href="{{ url_for('faculty_portal') }}" class="btn">
+                    Open Faculty Portal
+                </a>
+            </div>
+
+        {% elif 'STUDENT' in user.roles %}
+            <div class="card">
+                <h3>Student Portal</h3>
+                <p>Access your student profile and college information.</p>
+                <a href="{{ url_for('student_portal') }}" class="btn">
+                    Open Student Portal
+                </a>
+            </div>
+
+        {% else %}
+            <div class="card">
+                <h3>Portal Access</h3>
+                <p>Your account does not have a recognized portal role.</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="card">
+            <h3>Student Portal</h3>
+            <p>Sign in to access the student portal.</p>
+            <a href="{{ url_for('login') }}" class="btn">
+                Login to Continue
+            </a>
+        </div>
+
+        <div class="card">
+            <h3>Faculty Portal</h3>
+            <p>Sign in to access the faculty portal.</p>
+            <a href="{{ url_for('login') }}" class="btn">
+                Login to Continue
+            </a>
+        </div>
+
+        <div class="card">
+            <h3>Admin Portal</h3>
+            <p>Authorized administrators can manage student records.</p>
+            <a href="{{ url_for('login') }}" class="btn">
+                Admin Login
+            </a>
+        </div>
+    {% endif %}
+</section>
+
+
+<footer>SecureCampus IAM Project | Powered by Keycloak</footer>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management | SecureCampus</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+        .header, .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .count {
+            font-size: 14px;
+            color: #64748b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #eff6ff;
+        }
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+        }
+        .back {
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+        @media (max-width: 700px) {
+            body { padding: 12px; }
+            .panel { overflow-x: auto; }
+            th, td { white-space: nowrap; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <a class="back" href="/admin-dashboard">&larr; Back to Admin Dashboard</a>
+
+        <section class="header">
+            <div>
+                <h1>Student Management</h1>
+                <p>SecureCampus administration</p>
+            </div>
+            <strong>ADMIN ACCESS</strong>
+        </section>
+	<section class="panel">
+    <h2>Register Student Record</h2>
+    <p>Add a student profile to the SecureCampus database.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <p role="status"
+               style="padding: 12px; border-radius: 6px;
+               background: {{ '#dcfce7' if category == 'success' else '#fee2e2' }};
+               color: {{ '#166534' if category == 'success' else '#991b1b' }};">
+                {{ message }}
+            </p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin_students') }}">
+        <label for="keycloak_username">Keycloak Username</label><br>
+        <input id="keycloak_username" name="keycloak_username"
+               type="text" required maxlength="150"
+               autocomplete="off"><br><br>
+
+        <label for="full_name">Full Name</label><br>
+        <input id="full_name" name="full_name"
+               type="text" required maxlength="150"><br><br>
+
+        <label for="email">Email Address</label><br>
+        <input id="email" name="email"
+               type="email" required maxlength="254"><br><br>
+
+        <label for="department">Department</label><br>
+        <input id="department" name="department"
+               type="text" required maxlength="100"><br><br>
+
+        <button type="submit"
+                style="padding: 10px 16px; background: #2563eb;
+                color: white; border: 0; border-radius: 6px;
+                cursor: pointer;">
+            Add Student Record
+        </button>
+    </form>
+
+    <p style="color: #64748b; font-size: 13px;">
+        This adds a database profile only. It does not create a Keycloak account.
+    </p>
+</section>
+
+            <p class="count">Total records: {{ students|length }}</p>
+
+            {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.keycloak_username }}</td>
+                        <td>{{ student.full_name or "—" }}</td>
+                        <td>{{ student.email or "—" }}</td>
+                        <td>{{ student.department or "—" }}</td>
+                        <td>{{ student.created_at or "—" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty">
+                <h3>No student records yet</h3>
+                <p>Student records will appear here when they are registered.</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

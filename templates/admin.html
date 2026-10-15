@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | SecureCampus</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px #00000012;
+            margin-bottom: 20px;
+        }
+        .badge {
+            display: inline-block;
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+	
+.management-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 22px;
+}
+
+.management-button {
+    display: inline-block;
+    background: #2563eb;
+    color: #ffffff !important;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.management-button:hover {
+    background: #1d4ed8;
+}
+
+        a { color: white; }
+    </style>
+</head>
+<body>
+<section style="background: white; padding: 20px; margin: 20px 0; border-radius: 12px;">
+    <h2>Student Management</h2>
+    <p>View student records stored in the SecureCampus database.</p>
+    <a href="/admin/students"
+       style="display: inline-block; padding: 10px 16px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px;">
+        Manage Students
+    </a>
+</section>
+
+    <header>
+        <strong>SecureCampus | Admin Dashboard</strong>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </header>
+
+<main>
+    <div class="card">
+        <span class="badge">ADMIN ACCESS</span>
+        <h1>Welcome, {{ user.name or user.username }}!</h1>
+        <p>You have successfully accessed the administrator dashboard.</p>
+    </div>
+
+    <div class="card">
+        <h2>Administrator Profile</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Role:</strong> ADMIN</p>
+    </div>
+
+    
+<div class="card">
+    <h2>System Management</h2>
+    <p>Manage student records, review application activity, and view access policies.</p>
+
+    <div class="management-links">
+        <a class="management-button" href="{{ url_for('admin_students') }}">
+            Student Management
+        </a>
+
+        <a class="management-button" href="{{ url_for('admin_audit') }}">
+            Audit &amp; Reports
+        </a>
+
+        <a class="management-button" href="{{ url_for('admin_governance') }}">
+            Access Governance
+        </a>
+    </div>
+</div>
+
+</main>
+</body>
+</html>
